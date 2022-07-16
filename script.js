@@ -21,10 +21,32 @@ const ticTacToe = (()=> {
 
 const displayController = (()=> {
     const renderBoard = () => {
-        const cellList = document.querySelectorAll(".cell");
+        const gameBoardDiv = document.querySelector('#gameBoard');
+        const gameState = gameBoard.gameState;
+        gameState.forEach((row, index) => {
+            const rowDiv = document.createElement('div');
+            rowDiv.classList.add(`row${index + 1}`);
+            rowDiv.classList.add(`row`);
+            rowDiv.setAttribute("id", `row${index + 1}`);
+
+            row.forEach((column, index) => {
+                const columnDiv = document.createElement('div');
+                columnDiv.classList.add(`column${index + 1}`);
+                columnDiv.classList.add(`cell`);
+                columnDiv.innerHTML = column;
+                rowDiv.appendChild(columnDiv);
+            })
+
+            gameBoardDiv.appendChild(rowDiv);
+        })
         
     }
-})
+    return{
+        renderBoard
+    };
+})();
+
+displayController.renderBoard();
 //Game flow
 //gameboard, player forms are rendered
 //Players key in names (once)
