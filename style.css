@@ -26,6 +26,7 @@
 .cell{
     border-right: 3px solid black;
     padding: 3rem;
+    cursor: pointer;
 }
 
 .cell:last-child{

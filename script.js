@@ -1,8 +1,8 @@
 const gameBoard = (() => {
-    let gameState = [['x', 'x', 'x'], 
-                     ['o', 'o', 'o'], 
-                     ['x', 'x', 'x']];
-    let currMarker = '';
+    let gameState = [['', '', ''], 
+                     ['', '', ''], 
+                     ['', '', '']];
+    let currMarker = 'X';
     return{
         gameState,
         currMarker,
@@ -20,7 +20,7 @@ const ticTacToe = (()=> {
 })
 
 const displayController = (()=> {
-    const renderBoard = () => {
+    const renderBoard = () => { //rowid of row + index, cellclass of column + index
         const gameBoardDiv = document.querySelector('#gameBoard');
         const gameState = gameBoard.gameState;
         gameState.forEach((row, index) => {
@@ -33,7 +33,11 @@ const displayController = (()=> {
                 const columnDiv = document.createElement('div');
                 columnDiv.classList.add(`column${index + 1}`);
                 columnDiv.classList.add(`cell`);
-                columnDiv.innerHTML = column;
+                columnDiv.addEventListener('click', ()=> {
+                    const marker = document.createElement('span');
+                    marker.innerHTML = gameBoard.currMarker;
+                    columnDiv.appendChild(marker);
+                })
                 rowDiv.appendChild(columnDiv);
             })
 
