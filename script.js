@@ -3,9 +3,38 @@ const gameBoard = (() => {
                      ['', '', ''], 
                      ['', '', '']];
     let currMarker = 'X';
+    const addMarker = (row, col) => {
+        switch (row){
+            case 'row1':
+                row = 0;
+                break;
+            case 'row2':
+                row = 1;
+                break;
+            case 'row3':
+                row = 2;
+                break;
+        }
+        gameState[row][col-1] = currMarker;
+    }
+    const changeMarker = () => {
+        if (currMarker == 'X'){
+            currMarker = 'O';
+            return;
+        }
+
+        if (currMarker == 'O'){
+            currMarker = 'X';
+            return;
+        }
+    }
     return{
         gameState,
-        currMarker,
+        get getMarker() {
+            return currMarker;
+        },
+        changeMarker,
+        addMarker,
     };
 })();
 
@@ -34,9 +63,14 @@ const displayController = (()=> {
                 columnDiv.classList.add(`column${index + 1}`);
                 columnDiv.classList.add(`cell`);
                 columnDiv.addEventListener('click', ()=> {
-                    const marker = document.createElement('span');
-                    marker.innerHTML = gameBoard.currMarker;
+                    let marker = document.createElement('span');
+                    marker.innerHTML = gameBoard.getMarker;
                     columnDiv.appendChild(marker);
+                    
+                    let col = index+1;
+                    let rowNo = rowDiv.id;
+                    gameBoard.addMarker(rowNo, col);
+                    gameBoard.changeMarker();
                 })
                 rowDiv.appendChild(columnDiv);
             })
