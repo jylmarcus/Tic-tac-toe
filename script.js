@@ -15,8 +15,15 @@ const gameBoard = (() => {
                 row = 2;
                 break;
         }
+
+        if (gameState[row][col-1] != ''){
+            return;
+        }
+
         gameState[row][col-1] = currMarker;
+        changeMarker();
     }
+
     const changeMarker = () => {
         if (currMarker == 'X'){
             currMarker = 'O';
@@ -29,7 +36,9 @@ const gameBoard = (() => {
         }
     }
     return{
-        gameState,
+        get gameState() {
+            return gameState;
+        },
         get getMarker() {
             return currMarker;
         },
@@ -63,14 +72,16 @@ const displayController = (()=> {
                 columnDiv.classList.add(`column${index + 1}`);
                 columnDiv.classList.add(`cell`);
                 columnDiv.addEventListener('click', ()=> {
-                    let marker = document.createElement('span');
-                    marker.innerHTML = gameBoard.getMarker;
-                    columnDiv.appendChild(marker);
-                    
+
+                    if (!columnDiv.firstElementChild){
+                        let marker = document.createElement('span');
+                        marker.innerHTML = gameBoard.getMarker;
+                        columnDiv.appendChild(marker);
+                    }
+
                     let col = index+1;
                     let rowNo = rowDiv.id;
                     gameBoard.addMarker(rowNo, col);
-                    gameBoard.changeMarker();
                 })
                 rowDiv.appendChild(columnDiv);
             })
