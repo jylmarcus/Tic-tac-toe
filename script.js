@@ -47,15 +47,43 @@ const gameBoard = (() => {
     };
 })();
 
-const Player = (name) => {
+const Player = (newName) => {
     let marker = '';
-    const getName = () => name;
-    return {marker, getName};
+    let name = newName;
+    return {
+        get getMarker(){
+            return marker;
+        }, 
+
+        get getName(){
+            return name;
+        },
+
+        set setMarker(newMarker) {
+            marker = newMarker;
+        }
+    };
 }
 
 const ticTacToe = (()=> {
-    
-})
+    const startGameButton = document.querySelector('.startGame');
+    startGameButton.addEventListener('click', ()=>{ 
+
+        const playerOneName = document.getElementById('playerOneName');
+        let playerOne = Player(playerOneName.value);
+        playerOne.setMarker = 'X';
+        console.log(playerOne.getMarker);
+        console.log(playerOne.getName);
+
+        const playerTwoName = document.getElementById('playerTwoName');
+        let playerTwo = Player(playerTwoName.value);
+        playerTwo.setMarker = 'O';
+        console.log(playerTwo.getMarker);
+        console.log(playerTwo.getName);
+        }
+    )
+
+})();
 
 const displayController = (()=> {
     const renderBoard = () => { //rowid of row + index, cellclass of column + index
@@ -94,7 +122,6 @@ const displayController = (()=> {
         renderBoard
     };
 })();
-
 displayController.renderBoard();
 //Game flow
 //gameboard, player forms are rendered
