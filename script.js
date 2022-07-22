@@ -66,23 +66,36 @@ const Player = (newName) => {
 }
 
 const ticTacToe = (()=> {
+    let playerList = [];
+    let currPlayerIndex = 0;
     const startGameButton = document.querySelector('.startGame');
     startGameButton.addEventListener('click', ()=>{ 
 
         const playerOneName = document.getElementById('playerOneName');
         let playerOne = Player(playerOneName.value);
         playerOne.setMarker = 'X';
-        console.log(playerOne.getMarker);
-        console.log(playerOne.getName);
+        playerList.push(playerOne);
 
         const playerTwoName = document.getElementById('playerTwoName');
         let playerTwo = Player(playerTwoName.value);
         playerTwo.setMarker = 'O';
-        console.log(playerTwo.getMarker);
-        console.log(playerTwo.getName);
+        playerList.push(playerTwo);
+
+        displayController.renderTurn();
         }
     )
 
+    const changeTurn = () => {
+        currPlayerIndex ^= 1;
+        displayController.renderTurn();
+    }
+
+    return{
+        get getCurrPlayer(){
+            return playerList[currPlayerIndex];
+        },
+        changeTurn,
+    };
 })();
 
 const displayController = (()=> {
@@ -110,6 +123,7 @@ const displayController = (()=> {
                     let col = index+1;
                     let rowNo = rowDiv.id;
                     gameBoard.addMarker(rowNo, col);
+                    ticTacToe.changeTurn();
                 })
                 rowDiv.appendChild(columnDiv);
             })
@@ -118,8 +132,13 @@ const displayController = (()=> {
         })
         
     }
+    const playerTurn = document.getElementById('playerTurnText');
+    const renderTurn = () => {
+        playerTurn.innerHTML = `${ticTacToe.getCurrPlayer.getName}'s Turn`;
+    }
     return{
-        renderBoard
+        renderBoard,
+        renderTurn,
     };
 })();
 displayController.renderBoard();
