@@ -97,15 +97,14 @@ const ticTacToe = (()=> {
 
         switch (checkForWin(gameBoard.getMarker)) {
             case "win":
-                console.log('win');
+                displayController.renderGameEnd('win');
                 return;
 
             case "tie":
-                console.log('tie');
+                displayController.renderGameEnd('tie');
                 return;
 
             case "continue":
-                console.log('continue');
                 break;
         };
 
@@ -197,13 +196,27 @@ const displayController = (()=> {
         })
         
     }
+
     const playerTurn = document.getElementById('playerTurnText');
     const renderTurn = () => {
         playerTurn.innerHTML = `${ticTacToe.getCurrPlayer.getName}'s Turn`;
     }
+
+
+    const renderGameEnd = (result) => {
+        switch (result) {
+            case 'win':
+                playerTurn.innerHTML = `${ticTacToe.getCurrPlayer.getName} wins!`;
+                break;
+            case 'tie':
+                playerTurn.innerHTML = `Tied!`
+        }
+    }
+
     return{
         renderBoard,
         renderTurn,
+        renderGameEnd,
     };
 })();
 displayController.renderBoard();
