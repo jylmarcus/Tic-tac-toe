@@ -3,6 +3,7 @@ const gameBoard = (() => {
                      ['', '', ''], 
                      ['', '', '']];
     let currMarker = 'X';
+    let markerChanges = 0;
     const addMarker = (row, col) => {
         switch (row){
             case 'row1':
@@ -21,10 +22,10 @@ const gameBoard = (() => {
         }
 
         gameState[row][col-1] = currMarker;
-        changeMarker();
     }
 
     const changeMarker = () => {
+        markerChanges += 1;
         if (currMarker == 'X'){
             currMarker = 'O';
             return;
@@ -35,6 +36,11 @@ const gameBoard = (() => {
             return;
         }
     }
+
+    const boardFull = () => {
+        return markerChanges === gameState[0].length * gameState.length;
+    }
+
     return{
         get gameState() {
             return gameState;
@@ -44,6 +50,7 @@ const gameBoard = (() => {
         },
         changeMarker,
         addMarker,
+        boardFull,
     };
 })();
 
@@ -85,16 +92,75 @@ const ticTacToe = (()=> {
         }
     )
 
-    const changeTurn = () => {
+    const playTurn = (rowNo, col) => {
+        gameBoard.addMarker(rowNo, col);
+
+        switch (checkForWin(gameBoard.getMarker)) {
+            case "win":
+                console.log('win');
+                return;
+
+            case "tie":
+                console.log('tie');
+                return;
+
+            case "continue":
+                console.log('continue');
+                break;
+        };
+
+        gameBoard.changeMarker();
         currPlayerIndex ^= 1;
         displayController.renderTurn();
     }
 
-    return{
+    const checkForWin = (currMarker) => {
+
+      if (
+        gameBoard.gameState[0][2] === currMarker &&
+        gameBoard.gameState[1][1] === currMarker &&
+        gameBoard.gameState[2][0] === currMarker
+      ) {
+        return "win";
+      }
+      if (
+        gameBoard.gameState[0][0] === currMarker &&
+        gameBoard.gameState[1][1] === currMarker &&
+        gameBoard.gameState[2][2] === currMarker
+      ) {
+        return "win";
+      }
+
+      for (let i = 0; i < gameBoard.gameState.length; i++) {
+        if (
+          gameBoard.gameState[i][0] === currMarker &&
+          gameBoard.gameState[i][1] === currMarker &&
+          gameBoard.gameState[i][2] === currMarker
+        ) {
+          return 'win';
+        }
+        if (
+          gameBoard.gameState[0][i] === currMarker &&
+          gameBoard.gameState[1][i] === currMarker &&
+          gameBoard.gameState[2][i] === currMarker
+        ) {
+          return 'win';
+        }
+      }
+
+      if (gameBoard.boardFull()) {
+        return 'tie'; //return nothing if no winner and board filled
+      }
+
+      return 'continue'; //return nothing for incomplete game
+    };
+
+    return {
         get getCurrPlayer(){
             return playerList[currPlayerIndex];
         },
-        changeTurn,
+        playTurn,
+        checkForWin,
     };
 })();
 
@@ -122,8 +188,7 @@ const displayController = (()=> {
 
                     let col = index+1;
                     let rowNo = rowDiv.id;
-                    gameBoard.addMarker(rowNo, col);
-                    ticTacToe.changeTurn();
+                    ticTacToe.playTurn(rowNo, col);
                 })
                 rowDiv.appendChild(columnDiv);
             })
