@@ -38,7 +38,7 @@ const gameBoard = (() => {
     }
 
     const boardFull = () => {
-        return markerChanges === gameState[0].length * gameState.length;
+        return markerChanges === gameState[0].length * gameState.length - 1;
     }
 
     return{
