@@ -57,6 +57,10 @@ const gameBoard = (() => {
 const Player = (newName) => {
     let marker = '';
     let name = newName;
+    let score = 0;
+    const addScore = () => {
+        score += 1;
+    }
     return {
         get getMarker(){
             return marker;
@@ -66,9 +70,15 @@ const Player = (newName) => {
             return name;
         },
 
+        get getScore(){
+            return score;
+        },
+
         set setMarker(newMarker) {
             marker = newMarker;
-        }
+        },
+
+        addScore,
     };
 }
 
@@ -88,6 +98,7 @@ const ticTacToe = (()=> {
         playerTwo.setMarker = 'O';
         playerList.push(playerTwo);
 
+        displayController.updateNames(playerOne.getName, playerTwo.getName);
         displayController.renderTurn();
         }
     )
@@ -97,7 +108,9 @@ const ticTacToe = (()=> {
 
         switch (checkForWin(gameBoard.getMarker)) {
             case "win":
+                playerList[currPlayerIndex].addScore();
                 displayController.renderGameEnd('win');
+                displayController.renderNewScore(currPlayerIndex);
                 return;
 
             case "tie":
@@ -158,6 +171,7 @@ const ticTacToe = (()=> {
         get getCurrPlayer(){
             return playerList[currPlayerIndex];
         },
+
         playTurn,
         checkForWin,
     };
@@ -197,11 +211,19 @@ const displayController = (()=> {
         
     }
 
+
+
     const playerTurn = document.getElementById('playerTurnText');
     const renderTurn = () => {
         playerTurn.innerHTML = `${ticTacToe.getCurrPlayer.getName}'s Turn`;
     }
 
+    const updateNames = (firstName, secondName) => {
+        const playerOne = document.getElementById('scoreBoardNameOne');
+        const playerTwo = document.getElementById('scoreBoardNameTwo');
+        playerOne.innerHTML = firstName;
+        playerTwo.innerHTML = secondName;
+    }
 
     const renderGameEnd = (result) => {
         switch (result) {
@@ -213,13 +235,30 @@ const displayController = (()=> {
         }
     }
 
+    const renderNewScore = (currPlayerIndex) => {
+
+        switch (currPlayerIndex){
+            case 0:
+                const playerOneScore = document.getElementById('playerOneScore');
+                playerOneScore.innerHTML = ticTacToe.getCurrPlayer.getScore;
+                break;
+            case 1:
+                const playerTwoScore = document.getElementById('playerTwoScore');
+                playerTwoScore.innerHTML = ticTacToe.getCurrPlayer.getScore;
+                break;
+        }
+    }
+
     return{
         renderBoard,
+        updateNames,
         renderTurn,
         renderGameEnd,
+        renderNewScore,
     };
 })();
 displayController.renderBoard();
+
 //Game flow
 //gameboard, player forms are rendered
 //Players key in names (once)
@@ -233,6 +272,8 @@ displayController.renderBoard();
 //onclick function to mark a cell with marker
 //function to tell which marker it currently is
 //function to initialize players from form
-//function to determie starting player
+//function to determine starting player
 //function to determine when someone wins or game ties
-//
+//scoreboard tracking and rendering
+//function + button to start a new round
+//function + button to start a new game
