@@ -89,15 +89,17 @@ const ticTacToe = (()=> {
     startGameButton.addEventListener('click', ()=>{ 
 
         const playerOneName = document.getElementById('playerOneName');
-        let playerOne = Player(playerOneName.value);
+        let playerOne = playerOneName.value == '' ? Player('Player One') : Player(playerOneName.value);
         playerOne.setMarker = 'X';
         playerList.push(playerOne);
 
         const playerTwoName = document.getElementById('playerTwoName');
-        let playerTwo = Player(playerTwoName.value);
+        let playerTwo = playerTwoName.value == '' ? Player('Player Two') : Player(playerTwoName.value);
         playerTwo.setMarker = 'O';
         playerList.push(playerTwo);
 
+        displayController.closePlayerNameDialog();
+        displayController.renderBoard();
         displayController.updateNames(playerOne.getName, playerTwo.getName);
         displayController.renderTurn();
         }
@@ -178,6 +180,17 @@ const ticTacToe = (()=> {
 })();
 
 const displayController = (()=> {
+
+    const openPlayerNameDialog = () => {
+        const dialog = document.querySelector('#playerNames');
+        dialog.classList.remove('inactive');
+    }
+
+    const closePlayerNameDialog = () => {
+        const dialog = document.querySelector('#playerNames');
+        dialog.classList.add('inactive');
+    }
+
     const renderBoard = () => { //rowid of row + index, cellclass of column + index
         const gameBoardDiv = document.querySelector('#gameBoard');
         const gameState = gameBoard.gameState;
@@ -250,6 +263,8 @@ const displayController = (()=> {
     }
 
     return{
+        openPlayerNameDialog,
+        closePlayerNameDialog,
         renderBoard,
         updateNames,
         renderTurn,
@@ -257,7 +272,6 @@ const displayController = (()=> {
         renderNewScore,
     };
 })();
-displayController.renderBoard();
 
 //Game flow
 //gameboard, player forms are rendered
