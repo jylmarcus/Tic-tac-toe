@@ -186,6 +186,14 @@ const ticTacToe = (()=> {
         }
     );
 
+    const newGameButton = document.querySelector('#newGame');
+    newGameButton.addEventListener('click', () => {
+            gameBoard.reset();
+            displayController.reset();
+            playerList = [];
+        }
+    );
+
     return {
         get getCurrPlayer(){
             return playerList[currPlayerIndex];
@@ -280,6 +288,31 @@ const displayController = (()=> {
         }
     }
 
+    const reset = () => {
+
+        //reset gameBoard
+        const gameBoardDiv = document.querySelector('#gameBoard');
+        gameBoardDiv.innerHTML = '';
+
+        //reset scores
+        const playerOneScore = document.getElementById('playerOneScore');
+        playerOneScore.innerHTML = 0;
+        const playerTwoScore = document.getElementById('playerTwoScore');
+        playerTwoScore.innerHTML = 0;
+
+        //reset turn text
+        playerTurn.innerHTML = '';
+
+        //reset player names
+        const playerOne = document.getElementById('scoreBoardNameOne');
+        const playerTwo = document.getElementById('scoreBoardNameTwo');
+        playerOne.innerHTML = `Player One`;
+        playerTwo.innerHTML = `Player Two`;
+
+        openPlayerNameDialog();
+
+    }
+
     return{
         openPlayerNameDialog,
         closePlayerNameDialog,
@@ -288,6 +321,7 @@ const displayController = (()=> {
         renderTurn,
         renderGameEnd,
         renderNewScore,
+        reset,
     };
 })();
 
