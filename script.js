@@ -41,6 +41,14 @@ const gameBoard = (() => {
         return markerChanges === gameState[0].length * gameState.length - 1;
     }
 
+    const reset = () => {
+        gameState = [['', '', ''], 
+                     ['', '', ''], 
+                     ['', '', '']];
+        currMarker = 'X';
+        markerChanges = 0;
+    }
+
     return{
         get gameState() {
             return gameState;
@@ -51,6 +59,7 @@ const gameBoard = (() => {
         changeMarker,
         addMarker,
         boardFull,
+        reset,
     };
 })();
 
@@ -169,6 +178,14 @@ const ticTacToe = (()=> {
       return 'continue'; //return nothing for incomplete game
     };
 
+    const newRoundButton = document.querySelector('#newRound');
+    newRoundButton.addEventListener('click', () => {
+            gameBoard.reset();
+            displayController.renderBoard();
+            displayController.renderTurn();
+        }
+    );
+
     return {
         get getCurrPlayer(){
             return playerList[currPlayerIndex];
@@ -193,6 +210,7 @@ const displayController = (()=> {
 
     const renderBoard = () => { //rowid of row + index, cellclass of column + index
         const gameBoardDiv = document.querySelector('#gameBoard');
+        gameBoardDiv.innerHTML = '';
         const gameState = gameBoard.gameState;
         gameState.forEach((row, index) => {
             const rowDiv = document.createElement('div');
