@@ -213,6 +213,8 @@ const displayController = (()=> {
 
     const closePlayerNameDialog = () => {
         const dialog = document.querySelector('#playerNames');
+        const form = document.querySelector('#playerForm');
+        form.reset();
         dialog.classList.add('inactive');
     }
 
